@@ -130,7 +130,7 @@ jobs:
     - name: Commit and push changes
       if: steps.check_changes.outputs.changes == 'true'
       run: |
-        git add package.json package-lock.json CHANGELOG.md lib/
+        git add package.json package-lock.json CHANGELOG.md
         git commit -m "chore: release ${{ steps.bump_version.outputs.new_version }} [skip ci]" || exit 0
         git push origin HEAD:${{ github.ref_name }}
     
