@@ -1,6 +1,6 @@
 {
   "name": "an-frame-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "一个自定义的前端构建框架CLI，支持React、Vue和微前端qiankun",
   "main": "lib/index.js",
   "bin": {
