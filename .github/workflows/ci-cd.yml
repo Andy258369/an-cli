@@ -1,5 +1,12 @@
 name: CI/CD Pipeline
 
+# 设置工作流权限
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  packages: write
+
 on:
   push:
     branches: [ main, master ]
@@ -50,6 +57,7 @@ jobs:
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
+        persist-credentials: true
     
     - name: Use Node.js 18.x
       uses: actions/setup-node@v4
@@ -66,8 +74,8 @@ jobs:
     
     - name: Configure Git
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
     
     - name: Check for changes
       id: check_changes
@@ -133,13 +141,13 @@ jobs:
       run: |
         git add package.json package-lock.json CHANGELOG.md
         git commit -m "chore: release ${{ steps.bump_version.outputs.new_version }} [skip ci]" || exit 0
-        git push origin HEAD:${{ github.ref_name }}
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
     
     - name: Create Git tag
       if: steps.check_changes.outputs.changes == 'true'
       run: |
         git tag ${{ steps.bump_version.outputs.new_version }}
-        git push origin ${{ steps.bump_version.outputs.new_version }}
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git ${{ steps.bump_version.outputs.new_version }}
     
     - name: Publish to npm
       if: steps.check_changes.outputs.changes == 'true'
