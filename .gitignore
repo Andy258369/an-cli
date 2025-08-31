@@ -31,7 +31,8 @@ Thumbs.db
 test-projects/
 test-output*/
 quick-test/
-test-*.js
+test-generation.js
+test-generator.js
 
 # CI/CD
 .github/secrets/

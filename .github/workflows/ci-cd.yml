@@ -35,7 +35,7 @@ jobs:
     
     - name: Test CLI functionality
       run: |
-        node test-cli.js
+        npm run test:cli
         echo "CLI功能测试通过"
 
   release:
