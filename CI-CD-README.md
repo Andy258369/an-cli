@@ -1,4 +1,4 @@
-# an-cli CI/CD 配置指南
+# an-frame-cli CI/CD 配置指南
 
 ## 🚀 概述
 

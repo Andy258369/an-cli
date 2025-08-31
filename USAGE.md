@@ -4,7 +4,7 @@
 
 1. 全局安装：
 ```bash
-npm install -g an-cli
+npm install -g an-frame-cli
 ```
 
 2. 或者本地安装后链接：
@@ -96,7 +96,7 @@ my-project/
 
 ## 故障排除
 
-1. **权限问题**: 如果安装时遇到权限问题，可以使用 `sudo npm install -g an-cli`
+1. **权限问题**: 如果安装时遇到权限问题，可以使用 `sudo npm install -g an-frame-cli`
 2. **依赖安装失败**: 可以在项目创建后手动运行 `npm install`
 3. **TypeScript 错误**: 确保已正确安装 TypeScript 相关依赖
 

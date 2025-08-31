@@ -1,5 +1,5 @@
 {
-  "name": "an-cli",
+  "name": "an-frame-cli",
   "version": "1.0.0",
   "description": "一个自定义的前端构建框架CLI，支持React、Vue和微前端qiankun",
   "main": "lib/index.js",
@@ -62,10 +62,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andym/an-cli.git"
+    "url": "git+https://github.com/andym/an-frame-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/andym/an-cli/issues"
+    "url": "https://github.com/andym/an-frame-cli/issues"
   },
-  "homepage": "https://github.com/andym/an-cli#readme"
+  "homepage": "https://github.com/andym/an-frame-cli#readme"
 }

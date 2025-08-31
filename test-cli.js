@@ -7,7 +7,7 @@ const fs = require('fs-extra');
 async function testCLI() {
   const testDir = path.join(__dirname, 'test-output-automated');
   
-  console.log('🧪 开始测试 an-cli 工具...\n');
+  console.log('🧪 开始测试 an-frame-cli 工具...\n');
   
   // 清理测试目录
   await fs.remove(testDir);
@@ -75,7 +75,7 @@ async function testCLI() {
   console.log('   - 版本信息正确');
   console.log('   - 模板文件完整');
   console.log('   - TypeScript编译成功');
-  console.log('\n✨ an-cli 工具功能正常，可以使用！');
+  console.log('\n✨ an-frame-cli 工具功能正常，可以使用！');
 }
 
 function runCommand(command) {

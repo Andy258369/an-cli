@@ -1,4 +1,4 @@
-# an-cli
+# an-frame-cli
 
 一个自定义的前端构建框架CLI，支持快速创建 React 和 Vue 项目，内置 Webpack 5 配置，支持 TypeScript 和 qiankun 微前端。
 
@@ -15,7 +15,7 @@
 ## 安装
 
 ```bash
-npm install -g an-cli
+npm install -g an-frame-cli
 ```
 
 ## 使用方法
