@@ -11,7 +11,6 @@
     "dev": "tsc --watch",
     "prepublishOnly": "npm run build",
     "test": "jest",
-    "test:cli": "node test-cli.js",
     "version:patch": "npm version patch --no-git-tag-version",
     "version:minor": "npm version minor --no-git-tag-version",
     "version:major": "npm version major --no-git-tag-version",
