@@ -33,6 +33,10 @@ test-output*/
 quick-test/
 test-generation.js
 test-generator.js
+test-*.js
+debug-*/
+test-*/
+*-test/
 
 # CI/CD
 .github/secrets/

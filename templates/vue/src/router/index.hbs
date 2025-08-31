@@ -1,0 +1,44 @@
+{{#if (eq vueVersion "3")}}
+import { createRouter, createWebHistory{{#if typescript}}, RouteRecordRaw{{/if}} } from 'vue-router'
+{{else}}
+import Vue from 'vue'
+import VueRouter{{#if typescript}}, { RouteConfig }{{/if}} from 'vue-router'
+{{/if}}
+import Home from '../views/Home.vue'
+import About from '../views/About.vue'
+
+{{#if (eq vueVersion "2")}}
+Vue.use(VueRouter)
+{{/if}}
+
+{{#if typescript}}
+const routes: {{#if (eq vueVersion "3")}}Array<RouteRecordRaw>{{else}}Array<RouteConfig>{{/if}} = [
+{{else}}
+const routes = [
+{{/if}}
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: About
+  }
+]
+
+{{#if (eq vueVersion "3")}}
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+})
+{{else}}
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
+})
+{{/if}}
+
+export default router

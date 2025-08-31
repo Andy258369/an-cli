@@ -32,14 +32,7 @@ function registerHandlebarsHelpers() {
     return a === b;
   });
 
-  // 注册 if 条件助手
-  handlebars.registerHelper('if', function (this: any, conditional: any, options: any) {
-    if (conditional) {
-      return options.fn(this);
-    } else {
-      return options.inverse(this);
-    }
-  });
+  // 注意：if 助手函数是 Handlebars 内置的，不需要重新注册
 }
 
 async function processTemplateDirectory(
@@ -71,50 +64,81 @@ async function processTemplateFile(
   fileName: string, 
   data: any
 ): Promise<void> {
-  let targetFileName = fileName;
-  let shouldProcess = true;
-  
-  // 处理文件名中的模板变量
-  if (fileName.includes('{{')) {
-    const template = handlebars.compile(fileName);
-    targetFileName = template(data);
+  try {
+    let targetFileName = fileName;
+    let shouldProcess = fileName.endsWith('.hbs');
     
-    // 如果处理后的文件名为空，跳过此文件
-    if (!targetFileName.trim()) {
-      return;
+    if (shouldProcess) {
+      targetFileName = fileName.slice(0, -4);
+      
+      // 根据文件类型和选项添加正确的扩展名
+      targetFileName = getCorrectFileExtension(targetFileName, data);
+    }
+    
+    const targetFilePath = path.join(targetDir, targetFileName);
+    
+    if (shouldProcess) {
+      // 读取模板文件内容并处理
+      const templateContent = await fs.readFile(templateFilePath, 'utf-8');
+      
+      // 检查是否需要根据条件跳过此文件
+      if (shouldSkipFile(templateContent, data)) {
+        return;
+      }
+      
+      const template = handlebars.compile(templateContent);
+      const processedContent = template(data);
+      
+      // 确保目标目录存在
+      await fs.ensureDir(path.dirname(targetFilePath));
+      await fs.writeFile(targetFilePath, processedContent, 'utf-8');
+    } else {
+      // 直接复制文件
+      await fs.ensureDir(path.dirname(targetFilePath));
+      await fs.copy(templateFilePath, targetFilePath);
+    }
+  } catch (error) {
+    console.error('Error processing file', fileName, ':', error instanceof Error ? error.message : String(error));
+    // 不再抛出错误，继续处理其他文件
+  }
+}
+
+function getCorrectFileExtension(fileName: string, data: any): string {
+  const { typescript, framework } = data;
+  
+  // React 文件扩展名处理
+  if (framework === 'react') {
+    if (fileName === 'App' || fileName === 'index') {
+      return typescript ? `${fileName}.tsx` : `${fileName}.jsx`;
+    }
+    if (fileName.startsWith('pages/') || fileName.includes('Component')) {
+      const baseName = fileName;
+      return typescript ? `${baseName}.tsx` : `${baseName}.jsx`;
+    }
+    if (fileName.includes('styles/')) {
+      const baseName = fileName;
+      return typescript ? `${baseName}.scss` : `${baseName}.css`;
     }
   }
   
-  // 移除 .hbs 扩展名
-  if (targetFileName.endsWith('.hbs')) {
-    targetFileName = targetFileName.slice(0, -4);
-    shouldProcess = true;
-  } else {
-    shouldProcess = false;
-  }
-  
-  const targetFilePath = path.join(targetDir, targetFileName);
-  
-  if (shouldProcess) {
-    // 读取模板文件内容并处理
-    const templateContent = await fs.readFile(templateFilePath, 'utf-8');
-    
-    // 检查是否需要根据条件跳过此文件
-    if (shouldSkipFile(templateContent, data)) {
-      return;
+  // Vue 文件扩展名处理
+  if (framework === 'vue') {
+    if (fileName === 'main') {
+      return typescript ? `${fileName}.ts` : `${fileName}.js`;
     }
-    
-    const template = handlebars.compile(templateContent);
-    const processedContent = template(data);
-    
-    // 确保目标目录存在
-    await fs.ensureDir(path.dirname(targetFilePath));
-    await fs.writeFile(targetFilePath, processedContent, 'utf-8');
-  } else {
-    // 直接复制文件
-    await fs.ensureDir(path.dirname(targetFilePath));
-    await fs.copy(templateFilePath, targetFilePath);
+    if (fileName === 'router/index') {
+      return typescript ? `${fileName}.ts` : `${fileName}.js`;
+    }
+    if (fileName === 'styles/main') {
+      return typescript ? `${fileName}.scss` : `${fileName}.css`;
+    }
+    // Vue 组件文件保持 .vue 扩展名
+    if (fileName.endsWith('.vue')) {
+      return fileName;
+    }
   }
+  
+  return fileName;
 }
 
 function shouldSkipFile(content: string, data: any): boolean {

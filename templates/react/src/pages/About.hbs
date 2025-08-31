@@ -1,0 +1,29 @@
+import React from 'react';
+
+{{#if typescript}}
+const About: React.FC = () => {
+{{else}}
+function About() {
+{{/if}}
+  return (
+    <div>
+      <h2>关于</h2>
+      <p>这是关于页面。</p>
+      <h3>项目特性</h3>
+      <ul>
+        <li>React {{reactVersion}}</li>
+        {{#if typescript}}<li>TypeScript 支持</li>{{/if}}
+        {{#if router}}<li>React Router 路由</li>{{/if}}
+        <li>Webpack 5 构建</li>
+        <li>ESLint 代码检查</li>
+        <li>Jest 测试框架</li>
+      </ul>
+    </div>
+  );
+{{#if typescript}}
+};
+{{else}}
+}
+{{/if}}
+
+export default About;

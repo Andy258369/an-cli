@@ -1,0 +1,21 @@
+import React from 'react';
+
+{{#if typescript}}
+const Home: React.FC = () => {
+{{else}}
+function Home() {
+{{/if}}
+  return (
+    <div>
+      <h2>首页</h2>
+      <p>欢迎来到首页！</p>
+      <p>这是使用 An Frame CLI 创建的 React {{reactVersion}} 项目{{#if typescript}}，使用了 TypeScript{{/if}}。</p>
+    </div>
+  );
+{{#if typescript}}
+};
+{{else}}
+}
+{{/if}}
+
+export default Home;

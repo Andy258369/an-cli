@@ -1,23 +1,23 @@
 <template>
   <div class="page">
     <h2>首页</h2>
-    <p>这是首页内容</p>
-    <p>项目特性:</p>
+    <p>欢迎来到首页！</p>
+    <p>这是使用 An Frame CLI 创建的 Vue {{vueVersion}} 项目{{#if typescript}}，使用了 TypeScript{{/if}}{{#if router}}，集成了 Vue Router{{/if}}。</p>
+    
+    <div class="counter">
+      <button @click="decrement">-</button>
+      <span>计数: {{ count }}</span>
+      <button @click="increment">+</button>
+    </div>
+    
+    <h3>项目特性</h3>
     <ul>
-      <li>✅ Vue {{vueVersion}}</li>
-      {{#if typescript}}
-      <li>✅ TypeScript 支持</li>
-      {{/if}}
-      {{#if router}}
-      <li>✅ Vue Router</li>
-      {{/if}}
-      {{#if qiankun}}
-      <li>✅ qiankun 微前端 ({{#if (eq qiankunMode "main")}}主应用{{else}}微应用{{/if}})</li>
-      {{/if}}
-      <li>✅ Webpack 5</li>
-      <li>✅ SCSS 支持</li>
-      <li>✅ ESLint</li>
-      <li>✅ Jest 测试</li>
+      <li>Vue {{vueVersion}}</li>
+      {{#if typescript}}<li>TypeScript 支持</li>{{/if}}
+      {{#if router}}<li>Vue Router 路由</li>{{/if}}
+      <li>Webpack 5 构建</li>
+      <li>ESLint 代码检查</li>
+      <li>热重载开发</li>
     </ul>
   </div>
 </template>
@@ -25,38 +25,84 @@
 <script{{#if typescript}} lang="ts"{{/if}}>
 {{#if (eq vueVersion "3")}}
 {{#if typescript}}
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
-  name: 'Home'
-});
+  name: 'Home',
+  setup() {
+    const count = ref(0)
+    
+    const increment = () => {
+      count.value++
+    }
+    
+    const decrement = () => {
+      count.value--
+    }
+    
+    return {
+      count,
+      increment,
+      decrement
+    }
+  }
+})
 {{else}}
+import { ref } from 'vue'
+
 export default {
-  name: 'Home'
-};
+  name: 'Home',
+  setup() {
+    const count = ref(0)
+    
+    const increment = () => {
+      count.value++
+    }
+    
+    const decrement = () => {
+      count.value--
+    }
+    
+    return {
+      count,
+      increment,
+      decrement
+    }
+  }
+}
 {{/if}}
 {{else}}
 export default {
-  name: 'Home'
-};
+  name: 'Home',
+  data() {
+    return {
+      count: 0
+    }
+  },
+  methods: {
+    increment() {
+      this.count++
+    },
+    decrement() {
+      this.count--
+    }
+  }
+}
 {{/if}}
 </script>
 
-<style{{#if typescript}} lang="scss"{{/if}} scoped>
-.page {
+<style scoped>
+h2 {
+  color: #42b883;
+  margin-bottom: 1rem;
+}
+
+ul {
   text-align: left;
-  
-  h2 {
-    color: #42b883;
-    margin-bottom: 1rem;
-  }
-  
-  ul {
-    text-align: left;
-    
-    li {
-      margin-bottom: 0.5rem;
-    }
-  }
+  margin: 1rem 0;
+}
+
+li {
+  margin: 0.5rem 0;
 }
 </style>

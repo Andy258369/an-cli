@@ -4,35 +4,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 {{/if}}
-{{#if qiankun}}
-{{#if (eq qiankunMode "main")}}
-import { registerMicroApps, start } from 'qiankun';
-{{/if}}
-{{/if}}
 import './styles/App.{{#if typescript}}scss{{else}}css{{/if}}';
-
-{{#if qiankun}}
-{{#if (eq qiankunMode "main")}}
-// 注册微应用
-registerMicroApps([
-  {
-    name: 'micro-app-react',
-    entry: '//localhost:3001',
-    container: '#micro-container',
-    activeRule: '/micro-react',
-  },
-  {
-    name: 'micro-app-vue',
-    entry: '//localhost:3002', 
-    container: '#micro-container',
-    activeRule: '/micro-vue',
-  },
-]);
-
-// 启动 qiankun
-start();
-{{/if}}
-{{/if}}
 
 {{#if typescript}}
 const App: React.FC = () => {
@@ -48,8 +20,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>欢迎使用 An CLI</h1>
-        <p>这是一个基于 React {{reactVersion}} 的项目{{#if typescript}}，使用 TypeScript{{/if}}{{#if router}}，集成了 React Router{{/if}}{{#if qiankun}}{{#if (eq qiankunMode "main")}}，配置了 qiankun 主应用{{else}}，配置了 qiankun 微应用{{/if}}{{/if}}</p>
+        <h1>欢迎使用 An Frame CLI</h1>
+        <p>这是一个基于 React {{reactVersion}} 的项目{{#if typescript}}，使用 TypeScript{{/if}}{{#if router}}，集成了 React Router{{/if}}</p>
         
         <div className="counter">
           <button onClick={() => setCount(count - 1)}>-</button>
@@ -61,12 +33,6 @@ function App() {
         <nav className="navigation">
           <Link to="/">首页</Link>
           <Link to="/about">关于</Link>
-          {{#if qiankun}}
-          {{#if (eq qiankunMode "main")}}
-          <Link to="/micro-react">React 微应用</Link>
-          <Link to="/micro-vue">Vue 微应用</Link>
-          {{/if}}
-          {{/if}}
         </nav>
 
         <main className="main-content">
@@ -74,11 +40,6 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
           </Routes>
-          {{#if qiankun}}
-          {{#if (eq qiankunMode "main")}}
-          <div id="micro-container"></div>
-          {{/if}}
-          {{/if}}
         </main>
         {{/if}}
       </header>
