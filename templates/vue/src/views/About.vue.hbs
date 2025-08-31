@@ -1,0 +1,54 @@
+<template>
+  <div class="page">
+    <h2>关于</h2>
+    <p>这个项目由 An CLI 构建工具创建</p>
+    <p>An CLI 是一个强大的前端脚手架工具，支持:</p>
+    <ul>
+      <li>🚀 快速创建 React 和 Vue 项目</li>
+      <li>⚡ 内置 Webpack 5 配置</li>
+      <li>🎯 TypeScript 支持</li>
+      <li>🌐 qiankun 微前端集成</li>
+      <li>📦 灵活的依赖管理</li>
+      <li>🔧 开箱即用的开发环境</li>
+    </ul>
+  </div>
+</template>
+
+<script{{#if typescript}} lang="ts"{{/if}}>
+{{#if (eq vueVersion "3")}}
+{{#if typescript}}
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'About'
+});
+{{else}}
+export default {
+  name: 'About'
+};
+{{/if}}
+{{else}}
+export default {
+  name: 'About'
+};
+{{/if}}
+</script>
+
+<style{{#if typescript}} lang="scss"{{/if}} scoped>
+.page {
+  text-align: left;
+  
+  h2 {
+    color: #42b883;
+    margin-bottom: 1rem;
+  }
+  
+  ul {
+    text-align: left;
+    
+    li {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+</style>

@@ -1,0 +1,33 @@
+# .npmignore
+# 开发文件
+src/
+tests/
+*.test.ts
+*.spec.ts
+test-*
+jest.config.js
+tsconfig.json
+
+# 构建和配置文件
+.github/
+.git/
+.gitignore
+*.md
+!README.md
+
+# 临时文件和输出
+node_modules/
+coverage/
+*.log
+.env
+.env.*
+
+# IDE 和编辑器文件
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 操作系统文件
+.DS_Store
+Thumbs.db

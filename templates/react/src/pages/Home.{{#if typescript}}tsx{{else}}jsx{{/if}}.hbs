@@ -1,0 +1,37 @@
+import React from 'react';
+
+{{#if typescript}}
+const Home: React.FC = () => {
+{{else}}
+function Home() {
+{{/if}}
+  return (
+    <div className="page">
+      <h2>首页</h2>
+      <p>这是首页内容</p>
+      <p>项目特性:</p>
+      <ul>
+        <li>✅ React {{reactVersion}}</li>
+        {{#if typescript}}
+        <li>✅ TypeScript 支持</li>
+        {{/if}}
+        {{#if router}}
+        <li>✅ React Router</li>
+        {{/if}}
+        {{#if qiankun}}
+        <li>✅ qiankun 微前端 ({{#if (eq qiankunMode "main")}}主应用{{else}}微应用{{/if}})</li>
+        {{/if}}
+        <li>✅ Webpack 5</li>
+        <li>✅ SCSS 支持</li>
+        <li>✅ ESLint</li>
+        <li>✅ Jest 测试</li>
+      </ul>
+    </div>
+  );
+{{#if typescript}}
+};
+{{else}}
+}
+{{/if}}
+
+export default Home;

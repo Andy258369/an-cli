@@ -1,0 +1,258 @@
+<template>
+  <div id="app">
+    <header class="app-header">
+      <h1>欢迎使用 An CLI</h1>
+      <p>这是一个基于 Vue {{vueVersion}} 的项目{{#if typescript}}，使用 TypeScript{{/if}}{{#if router}}，集成了 Vue Router{{/if}}{{#if qiankun}}{{#if (eq qiankunMode "main")}}，配置了 qiankun 主应用{{else}}，配置了 qiankun 微应用{{/if}}{{/if}}</p>
+      
+      <div class="counter">
+        <button @click="decrementCount">-</button>
+        <span>计数: {{ count }}</span>
+        <button @click="incrementCount">+</button>
+      </div>
+
+      {{#if router}}
+      <nav class="navigation">
+        <router-link to="/">首页</router-link>
+        <router-link to="/about">关于</router-link>
+        {{#if qiankun}}
+        {{#if (eq qiankunMode "main")}}
+        <router-link to="/micro-react">React 微应用</router-link>
+        <router-link to="/micro-vue">Vue 微应用</router-link>
+        {{/if}}
+        {{/if}}
+      </nav>
+
+      <main class="main-content">
+        <router-view />
+        {{#if qiankun}}
+        {{#if (eq qiankunMode "main")}}
+        <div id="micro-container"></div>
+        {{/if}}
+        {{/if}}
+      </main>
+      {{/if}}
+    </header>
+  </div>
+</template>
+
+<script{{#if typescript}} lang="ts"{{/if}}>
+{{#if (eq vueVersion "3")}}
+{{#if typescript}}
+import { defineComponent, ref } from 'vue';
+{{#if qiankun}}
+{{#if (eq qiankunMode "main")}}
+import { registerMicroApps, start } from 'qiankun';
+
+// 注册微应用
+registerMicroApps([
+  {
+    name: 'micro-app-react',
+    entry: '//localhost:3001',
+    container: '#micro-container',
+    activeRule: '/micro-react',
+  },
+  {
+    name: 'micro-app-vue',
+    entry: '//localhost:3002', 
+    container: '#micro-container',
+    activeRule: '/micro-vue',
+  },
+]);
+
+// 启动 qiankun
+start();
+{{/if}}
+{{/if}}
+
+export default defineComponent({
+  name: 'App',
+  setup() {
+    const count = ref(0);
+    
+    const incrementCount = () => {
+      count.value++;
+    };
+    
+    const decrementCount = () => {
+      count.value--;
+    };
+    
+    return {
+      count,
+      incrementCount,
+      decrementCount
+    };
+  }
+});
+{{else}}
+import { ref } from 'vue';
+{{#if qiankun}}
+{{#if (eq qiankunMode "main")}}
+import { registerMicroApps, start } from 'qiankun';
+
+// 注册微应用
+registerMicroApps([
+  {
+    name: 'micro-app-react',
+    entry: '//localhost:3001',
+    container: '#micro-container',
+    activeRule: '/micro-react',
+  },
+  {
+    name: 'micro-app-vue',
+    entry: '//localhost:3002', 
+    container: '#micro-container',
+    activeRule: '/micro-vue',
+  },
+]);
+
+// 启动 qiankun
+start();
+{{/if}}
+{{/if}}
+
+export default {
+  name: 'App',
+  setup() {
+    const count = ref(0);
+    
+    const incrementCount = () => {
+      count.value++;
+    };
+    
+    const decrementCount = () => {
+      count.value--;
+    };
+    
+    return {
+      count,
+      incrementCount,
+      decrementCount
+    };
+  }
+};
+{{/if}}
+{{else}}
+{{#if qiankun}}
+{{#if (eq qiankunMode "main")}}
+import { registerMicroApps, start } from 'qiankun';
+
+// 注册微应用
+registerMicroApps([
+  {
+    name: 'micro-app-react',
+    entry: '//localhost:3001',
+    container: '#micro-container',
+    activeRule: '/micro-react',
+  },
+  {
+    name: 'micro-app-vue',
+    entry: '//localhost:3002', 
+    container: '#micro-container',
+    activeRule: '/micro-vue',
+  },
+]);
+
+// 启动 qiankun
+start();
+{{/if}}
+{{/if}}
+
+export default {
+  name: 'App',
+  data() {
+    return {
+      count: 0
+    };
+  },
+  methods: {
+    incrementCount() {
+      this.count++;
+    },
+    decrementCount() {
+      this.count--;
+    }
+  }
+};
+{{/if}}
+</script>
+
+<style{{#if typescript}} lang="scss"{{/if}}>
+#app {
+  text-align: center;
+}
+
+.app-header {
+  background-color: #2c3e50;
+  padding: 20px;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  
+  button {
+    background-color: #42b883;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    
+    &:hover {
+      background-color: #369870;
+    }
+  }
+  
+  span {
+    font-size: 1.2rem;
+    min-width: 100px;
+  }
+}
+
+.navigation {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+  
+  a {
+    color: #42b883;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border: 1px solid #42b883;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    
+    &:hover,
+    &.router-link-active {
+      background-color: #42b883;
+      color: white;
+    }
+  }
+}
+
+.main-content {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+#micro-container {
+  width: 100%;
+  height: 400px;
+  border: 1px solid #42b883;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+</style>

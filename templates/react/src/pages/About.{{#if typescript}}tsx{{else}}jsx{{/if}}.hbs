@@ -1,0 +1,29 @@
+import React from 'react';
+
+{{#if typescript}}
+const About: React.FC = () => {
+{{else}}
+function About() {
+{{/if}}
+  return (
+    <div className="page">
+      <h2>关于</h2>
+      <p>这个项目由 An CLI 构建工具创建</p>
+      <p>An CLI 是一个强大的前端脚手架工具，支持:</p>
+      <ul>
+        <li>🚀 快速创建 React 和 Vue 项目</li>
+        <li>⚡ 内置 Webpack 5 配置</li>
+        <li>🎯 TypeScript 支持</li>
+        <li>🌐 qiankun 微前端集成</li>
+        <li>📦 灵活的依赖管理</li>
+        <li>🔧 开箱即用的开发环境</li>
+      </ul>
+    </div>
+  );
+{{#if typescript}}
+};
+{{else}}
+}
+{{/if}}
+
+export default About;

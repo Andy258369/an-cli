@@ -1,0 +1,29 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    {{#if typescript}}
+    "@typescript-eslint/recommended",
+    {{/if}}
+    "plugin:vue/{{#if (eq vueVersion "3")}}vue3-{{else}}{{/if}}essential"
+  ],
+  {{#if typescript}}
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "parser": "@typescript-eslint/parser"
+  },
+  {{/if}}
+  "plugins": [
+    "vue"
+    {{#if typescript}}
+    ,"@typescript-eslint"
+    {{/if}}
+  ],
+  "rules": {
+    "vue/multi-word-component-names": "off"
+  }
+}

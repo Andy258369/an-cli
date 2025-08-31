@@ -1,0 +1,93 @@
+{{#if (eq vueVersion "3")}}
+import { createApp } from 'vue';
+{{else}}
+import Vue from 'vue';
+{{/if}}
+import App from './App.vue';
+{{#if router}}
+import router from './router';
+{{/if}}
+import './styles/main.{{#if typescript}}scss{{else}}css{{/if}}';
+
+{{#if qiankun}}
+{{#if (eq qiankunMode "micro")}}
+let instance{{#if (eq vueVersion "3")}}App{{/if}}: any = null;
+
+function render(props: any = {}) {
+  const { container } = props;
+  const dom = container ? container.querySelector('#app') : document.querySelector('#app');
+  
+  {{#if (eq vueVersion "3")}}
+  instance = createApp(App);
+  {{#if router}}
+  instance.use(router);
+  {{/if}}
+  instanceApp = instance.mount(dom);
+  {{else}}
+  instance = new Vue({
+    {{#if router}}
+    router,
+    {{/if}}
+    render: (h) => h(App),
+  }).$mount(dom);
+  {{/if}}
+}
+
+if (!window.__POWERED_BY_QIANKUN__) {
+  render({});
+}
+
+export async function bootstrap() {
+  console.log('[vue{{vueVersion}}] 微应用 bootstrap');
+}
+
+export async function mount(props: any) {
+  console.log('[vue{{vueVersion}}] 微应用 mount', props);
+  render(props);
+}
+
+export async function unmount(props: any) {
+  console.log('[vue{{vueVersion}}] 微应用 unmount', props);
+  {{#if (eq vueVersion "3")}}
+  instance.unmount();
+  {{else}}
+  instance.$destroy();
+  instance.$el.innerHTML = '';
+  {{/if}}
+  instance = null;
+  {{#if (eq vueVersion "3")}}
+  instanceApp = null;
+  {{/if}}
+}
+{{else}}
+{{#if (eq vueVersion "3")}}
+const app = createApp(App);
+{{#if router}}
+app.use(router);
+{{/if}}
+app.mount('#app');
+{{else}}
+new Vue({
+  {{#if router}}
+  router,
+  {{/if}}
+  render: (h) => h(App),
+}).$mount('#app');
+{{/if}}
+{{/if}}
+{{else}}
+{{#if (eq vueVersion "3")}}
+const app = createApp(App);
+{{#if router}}
+app.use(router);
+{{/if}}
+app.mount('#app');
+{{else}}
+new Vue({
+  {{#if router}}
+  router,
+  {{/if}}
+  render: (h) => h(App),
+}).$mount('#app');
+{{/if}}
+{{/if}}

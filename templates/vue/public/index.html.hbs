@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="An CLI 创建的 Vue 应用" />
+  <title>{{projectName}}</title>
+  {{#if qiankun}}
+  {{#if (eq qiankunMode "micro")}}
+  <script>
+    window.__POWERED_BY_QIANKUN__ = window.__POWERED_BY_QIANKUN__ || false;
+  </script>
+  {{/if}}
+  {{/if}}
+</head>
+<body>
+  <noscript>你需要启用 JavaScript 来运行此应用程序。</noscript>
+  <div id="app"></div>
+  {{#if qiankun}}
+  {{#if (eq qiankunMode "micro")}}
+  <script>
+    if (!window.__POWERED_BY_QIANKUN__) {
+      // 独立运行时的逻辑
+    }
+  </script>
+  {{/if}}
+  {{/if}}
+</body>
+</html>

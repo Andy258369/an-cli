@@ -1,0 +1,120 @@
+import React from 'react';
+{{#if (eq reactVersion "18")}}
+import { createRoot } from 'react-dom/client';
+{{else}}
+import ReactDOM from 'react-dom';
+{{/if}}
+{{#if router}}
+import { BrowserRouter } from 'react-router-dom';
+{{/if}}
+import App from './App';
+import './styles/index.{{#if typescript}}scss{{else}}css{{/if}}';
+
+{{#if qiankun}}
+{{#if (eq qiankunMode "micro")}}
+let root: any;
+
+function render(props: any = {}) {
+  const { container } = props;
+  const dom = container ? container.querySelector('#root') : document.querySelector('#root');
+  
+  {{#if (eq reactVersion "18")}}
+  root = createRoot(dom);
+  root.render(
+    {{#if router}}
+    <BrowserRouter basename={window.__POWERED_BY_QIANKUN__ ? '/{{projectName}}' : '/'}>
+      <App />
+    </BrowserRouter>
+    {{else}}
+    <App />
+    {{/if}}
+  );
+  {{else}}
+  ReactDOM.render(
+    {{#if router}}
+    <BrowserRouter basename={window.__POWERED_BY_QIANKUN__ ? '/{{projectName}}' : '/'}>
+      <App />
+    </BrowserRouter>
+    {{else}}
+    <App />
+    {{/if}},
+    dom
+  );
+  {{/if}}
+}
+
+if (!window.__POWERED_BY_QIANKUN__) {
+  render({});
+}
+
+export async function bootstrap() {
+  console.log('[react{{reactVersion}}] 微应用 bootstrap');
+}
+
+export async function mount(props: any) {
+  console.log('[react{{reactVersion}}] 微应用 mount', props);
+  render(props);
+}
+
+export async function unmount(props: any) {
+  console.log('[react{{reactVersion}}] 微应用 unmount', props);
+  {{#if (eq reactVersion "18")}}
+  root?.unmount();
+  {{else}}
+  const { container } = props;
+  const dom = container ? container.querySelector('#root') : document.querySelector('#root');
+  ReactDOM.unmountComponentAtNode(dom);
+  {{/if}}
+}
+{{else}}
+const container = document.getElementById('root');
+{{#if (eq reactVersion "18")}}
+const root = createRoot(container!);
+root.render(
+  {{#if router}}
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+  {{else}}
+  <App />
+  {{/if}}
+);
+{{else}}
+ReactDOM.render(
+  {{#if router}}
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+  {{else}}
+  <App />
+  {{/if}},
+  container
+);
+{{/if}}
+{{/if}}
+{{else}}
+const container = document.getElementById('root');
+{{#if (eq reactVersion "18")}}
+const root = createRoot(container!);
+root.render(
+  {{#if router}}
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+  {{else}}
+  <App />
+  {{/if}}
+);
+{{else}}
+ReactDOM.render(
+  {{#if router}}
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+  {{else}}
+  <App />
+  {{/if}},
+  container
+);
+{{/if}}
+{{/if}}

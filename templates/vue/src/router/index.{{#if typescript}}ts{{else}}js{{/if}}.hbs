@@ -1,0 +1,60 @@
+{{#if router}}
+{{#if (eq vueVersion "3")}}
+import { createRouter, createWebHistory{{#if qiankun}}{{#if (eq qiankunMode "micro")}}, createWebHashHistory{{/if}}{{/if}} } from 'vue-router';
+{{else}}
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+{{/if}}
+import Home from '../views/Home.vue';
+import About from '../views/About.vue';
+
+{{#if (eq vueVersion "2")}}
+Vue.use(VueRouter);
+{{/if}}
+
+const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: About
+  }
+];
+
+{{#if (eq vueVersion "3")}}
+const router = createRouter({
+  {{#if qiankun}}
+  {{#if (eq qiankunMode "micro")}}
+  history: window.__POWERED_BY_QIANKUN__ ? createWebHashHistory() : createWebHistory(),
+  {{else}}
+  history: createWebHistory(),
+  {{/if}}
+  {{else}}
+  history: createWebHistory(),
+  {{/if}}
+  routes
+});
+{{else}}
+const router = new VueRouter({
+  {{#if qiankun}}
+  {{#if (eq qiankunMode "micro")}}
+  mode: window.__POWERED_BY_QIANKUN__ ? 'hash' : 'history',
+  base: window.__POWERED_BY_QIANKUN__ ? '/{{projectName}}/' : '/',
+  {{else}}
+  mode: 'history',
+  base: process.env.BASE_URL,
+  {{/if}}
+  {{else}}
+  mode: 'history',
+  base: process.env.BASE_URL,
+  {{/if}}
+  routes
+});
+{{/if}}
+
+export default router;
+{{/if}}

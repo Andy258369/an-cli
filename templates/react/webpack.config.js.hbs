@@ -1,0 +1,108 @@
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+{{#if qiankun}}
+{{#if (eq qiankunMode "micro")}}
+const { name } = require('./package.json');
+{{/if}}
+{{/if}}
+
+module.exports = (env, argv) => {
+  const isProduction = argv.mode === 'production';
+  
+  return {
+    entry: './src/index.{{#if typescript}}tsx{{else}}jsx{{/if}}',
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: isProduction ? '[name].[contenthash].js' : '[name].js',
+      clean: true,
+      {{#if qiankun}}
+      {{#if (eq qiankunMode "micro")}}
+      library: `${name}-[name]`,
+      libraryTarget: 'umd',
+      jsonpFunction: `webpackJsonp_${name}`,
+      globalObject: 'window',
+      {{/if}}
+      {{/if}}
+    },
+    resolve: {
+      extensions: ['.tsx', '.ts', '.jsx', '.js'],
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+      },
+    },
+    module: {
+      rules: [
+        {{#if typescript}}
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
+        {{else}}
+        {
+          test: /\.jsx?$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env', '@babel/preset-react'],
+            },
+          },
+        },
+        {{/if}}
+        {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader'],
+        },
+        {
+          test: /\.s[ac]ss$/,
+          use: ['style-loader', 'css-loader', 'sass-loader'],
+        },
+        {
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          type: 'asset/resource',
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/i,
+          type: 'asset/resource',
+        },
+      ],
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: './public/index.html',
+        {{#if qiankun}}
+        {{#if (eq qiankunMode "micro")}}
+        inject: false,
+        {{/if}}
+        {{/if}}
+      }),
+    ],
+    devServer: {
+      static: {
+        directory: path.join(__dirname, 'public'),
+      },
+      compress: true,
+      port: 3000,
+      hot: true,
+      historyApiFallback: true,
+      {{#if qiankun}}
+      {{#if (eq qiankunMode "micro")}}
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+        'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      },
+      {{/if}}
+      {{/if}}
+    },
+    {{#if qiankun}}
+    {{#if (eq qiankunMode "micro")}}
+    externals: {
+      react: 'React',
+      'react-dom': 'ReactDOM',
+    },
+    {{/if}}
+    {{/if}}
+  };
+};
