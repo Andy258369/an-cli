@@ -7,7 +7,7 @@ import Vue from 'vue'
 import router from './router'
 {{/if}}
 import App from './App.vue'
-import './styles/main.{{#if typescript}}scss{{else}}css{{/if}}'
+import './styles/main.scss'
 
 {{#if (eq vueVersion "3")}}
 const app = createApp(App)

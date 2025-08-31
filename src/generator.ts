@@ -32,13 +32,29 @@ function registerHandlebarsHelpers() {
     return a === b;
   });
 
+  // 注册 and 助手函数用于逻辑与
+  handlebars.registerHelper('and', function (a: any, b: any) {
+    return a && b;
+  });
+
+  // 注册 or 助手函数用于逻辑或
+  handlebars.registerHelper('or', function (a: any, b: any) {
+    return a || b;
+  });
+
+  // 注册 not 助手函数用于逻辑非
+  handlebars.registerHelper('not', function (a: any) {
+    return !a;
+  });
+
   // 注意：if 助手函数是 Handlebars 内置的，不需要重新注册
 }
 
 async function processTemplateDirectory(
   templateDir: string, 
   targetDir: string, 
-  data: any
+  data: any,
+  relativePath: string = ''
 ): Promise<void> {
   const files = await fs.readdir(templateDir);
   
@@ -50,10 +66,11 @@ async function processTemplateDirectory(
       // 递归处理目录
       const targetSubDir = path.join(targetDir, file);
       await fs.ensureDir(targetSubDir);
-      await processTemplateDirectory(templateFilePath, targetSubDir, data);
+      const newRelativePath = relativePath ? `${relativePath}/${file}` : file;
+      await processTemplateDirectory(templateFilePath, targetSubDir, data, newRelativePath);
     } else {
       // 处理文件
-      await processTemplateFile(templateFilePath, targetDir, file, data);
+      await processTemplateFile(templateFilePath, targetDir, file, data, relativePath);
     }
   }
 }
@@ -62,7 +79,8 @@ async function processTemplateFile(
   templateFilePath: string, 
   targetDir: string, 
   fileName: string, 
-  data: any
+  data: any,
+  relativePath: string = ''
 ): Promise<void> {
   try {
     let targetFileName = fileName;
@@ -71,8 +89,16 @@ async function processTemplateFile(
     if (shouldProcess) {
       targetFileName = fileName.slice(0, -4);
       
+      // 构造完整的文件路径用于扩展名处理
+      const fullPath = relativePath ? `${relativePath}/${targetFileName}` : targetFileName;
+      
       // 根据文件类型和选项添加正确的扩展名
-      targetFileName = getCorrectFileExtension(targetFileName, data);
+      targetFileName = getCorrectFileExtension(fullPath, data);
+      
+      // 如果返回的是完整路径，只取文件名部分
+      if (targetFileName.includes('/')) {
+        targetFileName = path.basename(targetFileName);
+      }
     }
     
     const targetFilePath = path.join(targetDir, targetFileName);
@@ -82,9 +108,10 @@ async function processTemplateFile(
       const templateContent = await fs.readFile(templateFilePath, 'utf-8');
       
       // 检查是否需要根据条件跳过此文件
-      if (shouldSkipFile(templateContent, data)) {
-        return;
-      }
+      // 暂时禁用条件跳过逻辑，避免复杂的正则匹配问题
+      // if (shouldSkipFile(templateContent, data)) {
+      //   return;
+      // }
       
       const template = handlebars.compile(templateContent);
       const processedContent = template(data);
@@ -108,29 +135,33 @@ function getCorrectFileExtension(fileName: string, data: any): string {
   
   // React 文件扩展名处理
   if (framework === 'react') {
-    if (fileName === 'App' || fileName === 'index') {
+    // 样式文件优先处理（避免和组件文件冲突）
+    if (fileName.includes('styles/')) {
+      return `${fileName}.scss`;
+    }
+    // 组件文件 (App, 入口文件)
+    if (fileName === 'App' || fileName === 'index' || fileName.endsWith('/App') || fileName.endsWith('/index')) {
       return typescript ? `${fileName}.tsx` : `${fileName}.jsx`;
     }
-    if (fileName.startsWith('pages/') || fileName.includes('Component')) {
-      const baseName = fileName;
-      return typescript ? `${baseName}.tsx` : `${baseName}.jsx`;
-    }
-    if (fileName.includes('styles/')) {
-      const baseName = fileName;
-      return typescript ? `${baseName}.scss` : `${baseName}.css`;
+    // pages 目录下的文件
+    if (fileName.includes('pages/')) {
+      return typescript ? `${fileName}.tsx` : `${fileName}.jsx`;
     }
   }
   
   // Vue 文件扩展名处理
   if (framework === 'vue') {
-    if (fileName === 'main') {
+    // 样式文件优先处理
+    if (fileName.includes('styles/')) {
+      return `${fileName}.scss`;
+    }
+    // 入口文件
+    if (fileName === 'main' || fileName.endsWith('/main')) {
       return typescript ? `${fileName}.ts` : `${fileName}.js`;
     }
-    if (fileName === 'router/index') {
+    // 路由文件
+    if (fileName.includes('router/')) {
       return typescript ? `${fileName}.ts` : `${fileName}.js`;
-    }
-    if (fileName === 'styles/main') {
-      return typescript ? `${fileName}.scss` : `${fileName}.css`;
     }
     // Vue 组件文件保持 .vue 扩展名
     if (fileName.endsWith('.vue')) {
@@ -138,6 +169,7 @@ function getCorrectFileExtension(fileName: string, data: any): string {
     }
   }
   
+  // 配置文件和其他文件保持原样
   return fileName;
 }
 
@@ -148,7 +180,8 @@ function shouldSkipFile(content: string, data: any): boolean {
   
   while ((match = conditionalRegex.exec(content)) !== null) {
     const condition = match[1];
-    if (!data[condition]) {
+    const conditionValue = data[condition];
+    if (conditionValue === false || conditionValue === undefined || conditionValue === null) {
       // 如果整个文件都在条件块中且条件为false，则跳过文件
       const withoutConditional = content.replace(conditionalRegex, '').trim();
       if (!withoutConditional) {

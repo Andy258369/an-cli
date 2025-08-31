@@ -17,6 +17,7 @@
     "release:patch": "npm run build && npm run version:patch",
     "release:minor": "npm run build && npm run version:minor",
     "release:major": "npm run build && npm run version:major",
+    "publish:manual": "npm run build && npm test && echo '请手动运行以下命令完成发布:' && echo '1. npm run version:patch (或 version:minor/version:major)' && echo '2. git add package.json && git commit -m \"chore: release vX.X.X\"' && echo '3. git tag vX.X.X && git push && git push --tags' && echo '4. npm publish'",
     "clean": "rm -rf lib/ test-output*/"
   },
   "keywords": [
