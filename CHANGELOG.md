@@ -1,30 +1,45 @@
 # Changelog
 
+## [1.0.4] - 2024-08-31
+
+### 修复
+- 🐛 **修复 Sass 兼容性问题**
+  - 升级 sass 版本到 ^1.69.0，解决 legacy JS API 警告
+  - 配置 sass-loader 使用 modern-compiler API
+  - 消除 "Deprecation The legacy JS API is deprecated" 警告
+- 🐛 **修复 React TypeScript 编译问题**
+  - 改进 ts-loader 配置，添加 transpileOnly 和 compilerOptions
+  - 修复 tsconfig.json 条件模板导致的空文件问题
+  - 确保 TypeScript 和非 TypeScript 项目都能正常编译
+- 🔧 **优化 webpack 配置**
+  - 统一 sass-loader 配置格式，提高稳定性
+  - 改进 TypeScript 编译性能
+  - 修复条件模板问题
+
+### 改进
+- 📦 更新关键依赖版本以提高兼容性
+- ✅ 全面测试验证所有配置正确生成
+
+### 解决的问题
+- Vue2 项目的 sass deprecation 警告
+- React TypeScript 项目 ts-loader 编译失败
+- 空 tsconfig.json 导致的构建问题
+
 ## [1.0.3] - 2024-08-31
 
 ### 修复
 - 🐛 修复文件扩展名生成逻辑
-  - React pages 文件现在正确生成为 .jsx/.tsx
-  - 样式文件现在统一生成为 .scss 
-  - 路由文件生成正确的 .js/.ts 扩展名
-- 🐛 修复布尔值条件处理问题
-  - 修复选择 'n' 时卡住的问题
-  - 改进 Handlebars 条件检查逻辑
+- 🐛 修复布尔值条件处理问题  
 - 🐛 修复模板文件嵌套条件语句
-  - 移除有问题的嵌套 Handlebars 语法
-  - 简化模板逻辑，提高稳定性
 - 🔧 改进文件路径处理
-  - 修复递归目录处理中的路径传递
-  - 改进文件扩展名判断的优先级
 
-### 测试
-- ✅ 全面测试 React/Vue + TypeScript/JavaScript 组合
-- ✅ 验证交互式 CLI 创建流程
-- ✅ 确保所有文件扩展名正确生成
-## [v1.0.2] - 2025-08-31
+## [1.0.2] - 2024-08-31
 
-### Changes
-- 0972be5 chore: release v1.0.1
+### 修复
+- 修复了 Vue 模板生成的问题
+- 修复了 GitHub Actions 权限配置问题
+- 清理了项目中的测试文件
+- 优化了模板文件扩展名处理逻辑
 
 ## [1.0.1] - 2024-08-31
 
@@ -33,10 +48,6 @@
 - 修复了 GitHub Actions 权限配置问题
 - 清理了项目中的测试文件
 - 优化了模板文件扩展名处理逻辑
-
-### 改进
-- 改进了 Handlebars 模板语法
-- 优化了 CI/CD 流程
 
 ## [1.0.0] - 2024-08-31
 
