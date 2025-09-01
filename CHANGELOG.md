@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.0.7] - 2025-09-01
+
+### Changes
+- 2673e7c Merge remote changes
+- 2ac803a chore: release v1.0.6 [skip ci]
+
 ## [v1.0.6] - 2025-09-01
 
 ### Changes
