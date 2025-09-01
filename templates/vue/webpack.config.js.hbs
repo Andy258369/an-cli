@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
+const { DefinePlugin } = require('webpack');
 {{#if qiankun}}
 {{#if (eq qiankunMode "micro")}}
 const { name } = require('./package.json');
@@ -77,7 +78,7 @@ module.exports = (env, argv) => {
             {
               loader: 'sass-loader',
               options: {
-                api: 'modern-compiler',
+                api: 'modern',
                 sassOptions: {
                   silenceDeprecations: ['legacy-js-api']
                 }
@@ -97,6 +98,16 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new VueLoaderPlugin(),
+      new DefinePlugin({
+        __VUE_OPTIONS_API__: JSON.stringify(true),
+        __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
+        {{#if (eq vueVersion "3")}}
+        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false),
+        {{/if}}
+        'process.env': {
+          NODE_ENV: JSON.stringify(isProduction ? 'production' : 'development')
+        }
+      }),
       new HtmlWebpackPlugin({
         template: './public/index.html',
         {{#if qiankun}}
