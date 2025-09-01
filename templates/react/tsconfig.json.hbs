@@ -1,4 +1,3 @@
-{{#if typescript}}
 {
   "compilerOptions": {
     "target": "es5",
@@ -11,7 +10,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
+    "strict": {{#if typescript}}true{{else}}false{{/if}},
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
@@ -32,4 +31,3 @@
     "node_modules"
   ]
 }
-{{/if}}

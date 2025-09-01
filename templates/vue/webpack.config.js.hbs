@@ -46,6 +46,10 @@ module.exports = (env, argv) => {
           loader: 'ts-loader',
           options: {
             appendTsSuffixTo: [/\.vue$/],
+            transpileOnly: true,
+            compilerOptions: {
+              noEmit: false,
+            },
           },
           exclude: /node_modules/,
         },
@@ -67,7 +71,19 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.s[ac]ss$/,
-          use: ['style-loader', 'css-loader', 'sass-loader'],
+          use: [
+            'style-loader', 
+            'css-loader', 
+            {
+              loader: 'sass-loader',
+              options: {
+                api: 'modern-compiler',
+                sassOptions: {
+                  silenceDeprecations: ['legacy-js-api']
+                }
+              }
+            }
+          ],
         },
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/i,

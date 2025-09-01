@@ -1,14 +1,14 @@
-{{#if typescript}}
 {
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "strict": true,
+    "strict": {{#if typescript}}true{{else}}false{{/if}},
     "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
+    "allowJs": true,
     "baseUrl": ".",
     "types": [
       "webpack-env"
@@ -25,12 +25,11 @@
     ]
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
+    "src/**/*.{{#if typescript}}ts{{else}}js{{/if}}",
+    {{#if typescript}}"src/**/*.tsx",{{/if}}
     "src/**/*.vue"
   ],
   "exclude": [
     "node_modules"
   ]
 }
-{{/if}}
